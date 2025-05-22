@@ -3,24 +3,26 @@ import connectDb from "@/lib/db";
 import product from "@/models/product";
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "nodejs";
+// // Get item by ID
+// export async function GET(
+//   req: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   await connectDb();
+//   const item = await product.findById(params.id);
 
-type Context = {
-  params: {
-    id: string;
-  };
-};
+//   if (!item) {
+//     return NextResponse.json({ error: "Item not found" }, { status: 404 });
+//   }
 
-export async function GET(req: NextRequest, context: Context) {
-  await connectDb();
-  const item = await product.findById(context.params.id);
-  if (!item) {
-    return NextResponse.json({ error: "Item not found" }, { status: 404 });
-  }
-  return NextResponse.json(item);
-}
+//   return NextResponse.json(item);
+// }
 
-export async function PUT(req: NextRequest, context: Context) {
+// Update item (admin only)
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const session = await auth();
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Forbidden", { status: 403 });
@@ -28,9 +30,11 @@ export async function PUT(req: NextRequest, context: Context) {
 
   const data = await req.json();
   await connectDb();
-  const updatedItem = await product.findByIdAndUpdate(context.params.id, data, {
+
+  const updatedItem = await product.findByIdAndUpdate(params.id, data, {
     new: true,
   });
+
   if (!updatedItem) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
@@ -38,14 +42,19 @@ export async function PUT(req: NextRequest, context: Context) {
   return NextResponse.json(updatedItem);
 }
 
-export async function DELETE(req: NextRequest, context: Context) {
+// Delete item (admin only)
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const session = await auth();
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
   await connectDb();
-  const deletedItem = await product.findByIdAndDelete(context.params.id);
+  const deletedItem = await product.findByIdAndDelete(params.id);
+
   if (!deletedItem) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
