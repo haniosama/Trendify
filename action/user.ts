@@ -1,9 +1,9 @@
 "use server";
-import user from "@/models/users";
+import user from "../models/users";
 import { redirect } from "next/navigation";
 import connectDb from "@/lib/db";
 import { hash } from "bcryptjs";
-import { signIn } from "@/auth";
+import { signIn } from "../auth";
 
 const login = async (formData: FormData) => {
   const email = formData.get("email");

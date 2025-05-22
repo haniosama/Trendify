@@ -67,7 +67,7 @@ const Navbar = async () => {
                 {user?.role === "admin" && (
                   <li>
                     <Link
-                      href="/admin/dashboard"
+                      href="/private/dashboard"
                       className="hover:text-gray-200 transition duration-200"
                     >
                       Dashboard

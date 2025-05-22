@@ -1,7 +1,6 @@
 import CarouselComponent from "@/components/carousel";
 import DisplayCategory from "@/components/category";
 import axios from "axios";
-
 import Image from "next/image";
 import Link from "next/link";
 interface product {

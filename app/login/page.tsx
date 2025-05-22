@@ -2,6 +2,7 @@ import { getSession } from "@/lib/session";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import Login from "@/components/login";
+
 const LoginPage = async () => {
   const session = await getSession();
   const user = session?.user;

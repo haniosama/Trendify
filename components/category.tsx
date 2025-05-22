@@ -71,7 +71,7 @@ export const categoryList = [
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Home() {
+export default function Category() {
   return (
     <div className="p-6 lg:px-20 md:px-16">
       <h1 className="text-3xl font-bold mb-6">Browse by Category</h1>

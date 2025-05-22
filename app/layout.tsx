@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/auth/Navbar";
 import Footer from "@/components/footer";
+import { Toaster } from "@/components/ui/sonner";
+import DarkModeToggle from "@/components/darkModeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +33,9 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
+        <Toaster />
         <Footer />
+        <DarkModeToggle />
       </body>
     </html>
   );

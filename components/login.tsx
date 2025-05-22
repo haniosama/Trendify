@@ -1,8 +1,10 @@
+"use client";
 import { login } from "@/action/user";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import Link from "next/link";
 import { FaGithub, FaGoogle } from "react-icons/fa";
+import { toast } from "sonner";
 
 import { signInWithGithub, signInWithGoogle } from "@/action/authAction";
 const Login = () => {
@@ -29,6 +31,9 @@ const Login = () => {
         />
 
         <button
+          onClick={() => {
+            toast("Login successful");
+          }}
           type="submit"
           className="
               mt-4 w-full py-3 rounded-md
