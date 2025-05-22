@@ -6,10 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 // Get item by ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   await connectDb();
-  const item = await product.findById(params.id);
+  const item = await product.findById(context.params.id);
 
   if (!item) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
@@ -21,7 +21,7 @@ export async function GET(
 // Update item (admin only)
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   const session = await auth();
   if (!session || session.user.role !== "admin") {
@@ -31,7 +31,7 @@ export async function PUT(
   const data = await req.json();
   await connectDb();
 
-  const updatedItem = await product.findByIdAndUpdate(params.id, data, {
+  const updatedItem = await product.findByIdAndUpdate(context.params.id, data, {
     new: true,
   });
 
@@ -45,7 +45,7 @@ export async function PUT(
 // Delete item (admin only)
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   const session = await auth();
   if (!session || session.user.role !== "admin") {
@@ -53,7 +53,7 @@ export async function DELETE(
   }
 
   await connectDb();
-  const deletedItem = await product.findByIdAndDelete(params.id);
+  const deletedItem = await product.findByIdAndDelete(context.params.id);
 
   if (!deletedItem) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
