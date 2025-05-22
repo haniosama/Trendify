@@ -3,26 +3,24 @@ import connectDb from "@/lib/db";
 import product from "@/models/product";
 import { NextRequest, NextResponse } from "next/server";
 
-// Get item by ID
-export async function GET(
-  req: NextRequest,
-  context: { params: Record<string, string> }
-) {
+export const runtime = "nodejs";
+
+type Context = {
+  params: {
+    id: string;
+  };
+};
+
+export async function GET(req: NextRequest, context: Context) {
   await connectDb();
   const item = await product.findById(context.params.id);
-
   if (!item) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
-
   return NextResponse.json(item);
 }
 
-// Update item (admin only)
-export async function PUT(
-  req: NextRequest,
-  context: { params: Record<string, string> }
-) {
+export async function PUT(req: NextRequest, context: Context) {
   const session = await auth();
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Forbidden", { status: 403 });
@@ -30,11 +28,9 @@ export async function PUT(
 
   const data = await req.json();
   await connectDb();
-
   const updatedItem = await product.findByIdAndUpdate(context.params.id, data, {
     new: true,
   });
-
   if (!updatedItem) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
@@ -42,11 +38,7 @@ export async function PUT(
   return NextResponse.json(updatedItem);
 }
 
-// Delete item (admin only)
-export async function DELETE(
-  req: NextRequest,
-  context: { params: Record<string, string> }
-) {
+export async function DELETE(req: NextRequest, context: Context) {
   const session = await auth();
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Forbidden", { status: 403 });
@@ -54,7 +46,6 @@ export async function DELETE(
 
   await connectDb();
   const deletedItem = await product.findByIdAndDelete(context.params.id);
-
   if (!deletedItem) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
